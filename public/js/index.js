@@ -7,13 +7,13 @@ var scoreURL = {
 	dURL: site + "/score_del.php"
 }
 
-getList();
-function getList() {
+getList(1);
+function getList(page) {
 	$.ajax({
 		type: "get",
 		url: scoreURL.rURL,
 		data: {
-			page: 6
+			page: page
 		},
 		dataType: "json",
 		success: function(res) {
