@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,19 +17,54 @@
 	<script src="js/imagesloaded.pkgd.min.js"></script>
 	<script src="js/wow.min.js"></script>
 </head>
+
 <body>
 	<div class="jumbotron">
-		<h2>
-			성적관리 애플리케이션<br>
-			<small class="pl-3 text-secondary">Ajax를 이용한 성적관리 SPA 애플리케이션</small>
-		</h2>
+		<div class="container">
+			<h2>
+				성적관리 애플리케이션<br>
+				<small class="pl-3 text-secondary">Ajax를 이용한 성적관리 SPA 애플리케이션</small>
+			</h2>
+		</div>
 	</div>
 	<div class="container my-5">
 		<form name="scoreForm">
-			<div><i class="fas fa-edit"></i> 성적 입력</div>
-			<div class="border border-primary m-3 p-3"></div>
+			<div>
+				<i class="fas fa-edit"></i>
+				<span class="f-125">성적 입력</span>
+			</div>
+			<div class="border border-primary my-2 p-3">
+				<div class="row">
+					<div class="col-md-3">
+						<input type="text" class="form-control" name="stdname" id="stdname" placeholder="이름">
+					</div>
+					<div class="col-md-2">
+						<input type="number" class="form-control" name="kor" id="kor" placeholder="국어">
+					</div>
+					<div class="col-md-2">
+						<input type="number" class="form-control" name="eng" id="eng" placeholder="영어">
+					</div>
+					<div class="col-md-2">
+						<input type="number" class="form-control" name="math" id="math" placeholder="수학">
+					</div>
+					<div class="col-md-3 text-center">
+						<button type="button" class="btn btn-primary">저장</button>
+						<button type="reset" class="btn btn-danger">다시작성</button>
+					</div>
+				</div>
+			</div>
 		</form>
+		<div class="scores my-5">
+			<div>
+				<i class="fas fa-edit"></i>
+				<span class="f-125">성적 리스트</span>
+			</div>
+			<table class="score-tb table table-bordered table-stripe table-hover">
+
+			</table>
+		</div>
 	</div>
 	<script src="js/index.js"></script>
 </body>
+
 </html>
