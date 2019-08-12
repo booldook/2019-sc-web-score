@@ -7,7 +7,7 @@ var scoreURL = {
 	dURL: site + "/score_del.php"
 }
 
-getList(1);
+getList(6);
 function getList(page) {
 	$.ajax({
 		type: "get",
@@ -31,10 +31,36 @@ function getList(page) {
 				html += '</tr>';
 				$(".score-tb").find("tbody").append(html);
 			}
+			pagerMaker(res.total, page);
 		},
 		error: function(xhr) {
 			alert("통신이 실패했습니다. 관리자에게 문의하세요.");
 			console.log(xhr);
 		}
 	});
+}
+
+function pagerMaker(total, page) {
+	var cnt = Math.ceil(total/10);
+	html  = '<li class="page-item page-prev">';
+	html += '<span class="page-link"><i class="fas fa-angle-double-left"></i></span>';
+	html += '</li>';
+	html += '<li class="page-item page-lt">';
+	html += '<span class="page-link"><i class="fas fa-angle-left"></i></span>';
+	html += '</li>';
+	for(var i=1; i<=cnt; i++) {
+		html += '<li class="page-item page-ct">';
+		html += '<span class="page-link">'+i+'</span>';
+		html += '</li>';
+	}
+	html += '<li class="page-item page-rt">';
+	html += '<span class="page-link"><i class="fas fa-angle-right"></i></span>';
+	html += '</li>';
+	html += '<li class="page-item page-next">';
+	html += '<span class="page-link"><i class="fas fa-angle-double-right"></i></span>';
+	html += '</li>';
+	$(".pager").html(html);
+	if(page == 1) $(".page-lt").addClass("disabled");
+	if(page == cnt) $(".page-rt").addClass("disabled");
+	$(".page-ct").eq(page-1).addClass("active");
 }
