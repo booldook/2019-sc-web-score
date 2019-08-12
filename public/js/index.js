@@ -10,10 +10,14 @@ var scoreURL = {
 getList();
 function getList() {
 	$.ajax({
-		type: "post",
+		type: "get",
 		url: scoreURL.rURL,
+		data: {
+			page: 6
+		},
 		dataType: "json",
 		success: function(res) {
+			console.log(res);
 			for(var i in res.student) {
 				html  = '<tr>';
 				html += '<td>'+res.student[i].stdname+'</td>';
