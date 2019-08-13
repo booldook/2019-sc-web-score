@@ -1,3 +1,16 @@
+// 삼항연산자
+// 조건?참일때:거짓일때
+console.log(3>5?"참":"거짓");
+
+// data-set
+$("#bt-data-test").click(function(){
+	var id = $(this).data("id");
+	var show = $(this).data("show-text");
+	var hide = $(this).data("hide-text");
+	console.log(id, show, hide);
+});
+
+
 var html = '';
 var site = "https://webmir.co.kr/score";
 var scoreURL = {
@@ -18,6 +31,7 @@ function getList(page) {
 		dataType: "json",
 		success: function(res) {
 			console.log(res);
+			$(".score-tb").find("tbody").empty();
 			for(var i in res.student) {
 				html  = '<tr>';
 				html += '<td>'+res.student[i].stdname+'</td>';
@@ -65,7 +79,7 @@ function pagerMaker(total, page) {
 
 	if(lastIndex > nowIndex) {
 		lastShow = true;
-		last = edn + 1;
+		next = edn + 1;
 	}
 
 	console.log("stn:"+stn);
@@ -73,25 +87,25 @@ function pagerMaker(total, page) {
 	console.log("lastIndex:"+lastIndex);
 	console.log("nowIndex:"+nowIndex);
 
-	html  = '<li class="page-item page-first">';
+	html  = '<li class="page-item page-first '+(prevShow?"":"disabled")+'" data-page="'+first+'">';
 	html += '<span class="page-link"><i class="fas fa-angle-double-left"></i></span>';
 	html += '</li>';
-	html += '<li class="page-item page-prev">';
+	html += '<li class="page-item page-prev '+(prevShow?"":"disabled")+'" data-page="'+prev+'">';
 	html += '<span class="page-link"><i class="fas fa-angle-left"></i></span>';
 	html += '</li>';
-	for(var i=1; i<=cnt; i++) {
-		html += '<li class="page-item page-ct">';
+	for(var i=stn; i<=edn; i++) {
+		html += '<li class="page-item page-ct '+(page==i?"active":"")+'" data-page="'+i+'">';
 		html += '<span class="page-link">'+i+'</span>';
 		html += '</li>';
 	}
-	html += '<li class="page-item page-next">';
+	html += '<li class="page-item page-next '+(lastShow?"":"disabled")+'" data-page="'+next+'">';
 	html += '<span class="page-link"><i class="fas fa-angle-right"></i></span>';
 	html += '</li>';
-	html += '<li class="page-item page-last">';
+	html += '<li class="page-item page-last '+(lastShow?"":"disabled")+'" data-page="'+last+'">';
 	html += '<span class="page-link"><i class="fas fa-angle-double-right"></i></span>';
 	html += '</li>';
 	$(".pager").html(html);
-	if(page == 1) $(".page-lt").addClass("disabled");
-	if(page == cnt) $(".page-rt").addClass("disabled");
-	$(".page-ct").eq(page-1).addClass("active");
+	$(".page-item").click(function(){
+		getList(	$(this).data("page")	);
+	});
 }
