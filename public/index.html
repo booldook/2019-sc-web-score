@@ -34,22 +34,22 @@
 				<i class="fas fa-edit"></i>
 				<span class="f-125">성적 입력</span>
 			</div>
-			<div class="border border-primary my-2 p-3">
+			<div class="border my-2 p-3">
 				<div class="row">
 					<div class="col-md-2 py-1">
 						<input type="text" class="form-control" name="stdname" id="stdname" placeholder="이름">
 					</div>
 					<div class="col-md-2 py-1">
-						<input type="number" class="form-control" name="kor" id="kor" placeholder="국어">
+						<input type="number" class="form-control" name="kor" id="kor" placeholder="국어" min="0" max="100">
 					</div>
 					<div class="col-md-2 py-1">
-						<input type="number" class="form-control" name="eng" id="eng" placeholder="영어">
+						<input type="number" class="form-control" name="eng" id="eng" placeholder="영어" min="0" max="100">
 					</div>
 					<div class="col-md-2 py-1">
-						<input type="number" class="form-control" name="math" id="math" placeholder="수학">
+						<input type="number" class="form-control" name="math" id="math" placeholder="수학" min="0" max="100">
 					</div>
 					<div class="col-md-4 py-1 text-center">
-						<button type="button" class="btn btn-primary">저장</button>
+						<button type="button" class="btn btn-primary" id="bt-save">저장</button>
 						<button type="reset" class="btn btn-danger">다시작성</button>
 					</div>
 				</div>

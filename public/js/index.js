@@ -135,3 +135,49 @@ function deleteMaker() {
 		}
 	});
 }
+
+// 데이터 저장
+$("#bt-save").click(function(){
+	var stdname = $.trim($("#stdname").val());
+	var kor = Number($("#kor").val());
+	var eng = Number($("#eng").val());
+	var math = Number($("#math").val());
+	if(kor == 0) kor = "0";
+	if(eng == 0) eng = "0";
+	if(math == 0) math = "0";
+	if(stdname == "") {
+		alert("학생 이름을 입력해 주세요.");
+		$("#stdname").focus();
+		return;
+	}
+	if(kor == "" || kor<0 || kor>100) {
+		alert("올바른 국어점수를 입력하세요.");
+		$("#kor").focus();
+		return;
+	}
+	if(eng == "" || eng<0 || eng>100) {
+		alert("올바른 영어점수를 입력하세요.");
+		$("#eng").focus();
+		return;
+	}
+	if(math == "" || math<0 || math>100) {
+		alert("올바른 수학점수를 입력하세요.");
+		$("#math").focus();
+		return;
+	}
+	$.ajax({
+		type: "post",
+		url: scoreURL.cURL,
+		data: {
+			stdname: stdname,
+			kor: kor,
+			eng: eng,
+			math: math
+		},
+		dataType: "json",
+		success: function (res) {
+			if (res.code == 200) getList(nowPage);
+			else alert("데이터 처리가 실패했습니다. 관리자에게 문의하세요.");
+		}
+	});
+});
