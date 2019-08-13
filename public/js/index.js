@@ -63,8 +63,6 @@ function pagerMaker(total, page) {
 	var next = 0;										// > 를 클릭시 나타날 페이지
 	var prevShow = false;
 	var lastShow = false;
-	var first = 1;
-	var last = cnt;
 	var lastIndex = (Math.ceil(cnt/div) - 1);			// 페이지 세트의 마지막 index
 	var nowIndex = (Math.ceil(page/div) - 1);			// 현재페이지 세트의 index
 
@@ -87,10 +85,10 @@ function pagerMaker(total, page) {
 	console.log("lastIndex:"+lastIndex);
 	console.log("nowIndex:"+nowIndex);
 
-	html  = '<li class="page-item page-first '+(prevShow?"":"disabled")+'" data-page="'+first+'">';
+	html  = '<li class="page-item page-first '+(prevShow?"":"disabled")+'" data-page="'+prev+'">';
 	html += '<span class="page-link"><i class="fas fa-angle-double-left"></i></span>';
 	html += '</li>';
-	html += '<li class="page-item page-prev '+(prevShow?"":"disabled")+'" data-page="'+prev+'">';
+	html += '<li class="page-item page-prev '+((page>1)?"":"disabled")+'" data-page="'+((page>1)?(page-1):0)+'">';
 	html += '<span class="page-link"><i class="fas fa-angle-left"></i></span>';
 	html += '</li>';
 	for(var i=stn; i<=edn; i++) {
@@ -98,10 +96,10 @@ function pagerMaker(total, page) {
 		html += '<span class="page-link">'+i+'</span>';
 		html += '</li>';
 	}
-	html += '<li class="page-item page-next '+(lastShow?"":"disabled")+'" data-page="'+next+'">';
+	html += '<li class="page-item page-next '+(page<cnt?"":"disabled")+'" data-page="'+((page<cnt)?(page+1):0)+'">';
 	html += '<span class="page-link"><i class="fas fa-angle-right"></i></span>';
 	html += '</li>';
-	html += '<li class="page-item page-last '+(lastShow?"":"disabled")+'" data-page="'+last+'">';
+	html += '<li class="page-item page-last '+(lastShow?"":"disabled")+'" data-page="'+next+'">';
 	html += '<span class="page-link"><i class="fas fa-angle-double-right"></i></span>';
 	html += '</li>';
 	$(".pager").html(html);
@@ -109,3 +107,4 @@ function pagerMaker(total, page) {
 		if(!$(this).hasClass("disabled")) getList($(this).data("page"));
 	});
 }
+console.log(!false);
