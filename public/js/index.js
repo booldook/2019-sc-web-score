@@ -47,6 +47,8 @@ function pagerMaker(total, page) {
 	var edn = 0;										// 세트중에 마지막페이지
 	var prev = 0;										// < 를 클릭시 나타날 페이지 
 	var next = 0;										// > 를 클릭시 나타날 페이지
+	var prevShow = false;
+	var lastShow = false;
 	var first = 1;
 	var last = cnt;
 	var lastIndex = (Math.ceil(cnt/div) - 1);			// 페이지 세트의 마지막 index
@@ -56,13 +58,20 @@ function pagerMaker(total, page) {
 	if(cnt < stn + div - 1) edn = cnt;
 	else edn = stn + div - 1;
 
+	if(nowIndex > 0) {
+		prevShow = true;
+		prev = stn - 1;
+	}
+
+	if(lastIndex > nowIndex) {
+		lastShow = true;
+		last = edn + 1;
+	}
+
 	console.log("stn:"+stn);
 	console.log("edn:"+edn);
 	console.log("lastIndex:"+lastIndex);
 	console.log("nowIndex:"+nowIndex);
-
-
-
 
 	html  = '<li class="page-item page-first">';
 	html += '<span class="page-link"><i class="fas fa-angle-double-left"></i></span>';
