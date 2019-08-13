@@ -106,6 +106,6 @@ function pagerMaker(total, page) {
 	html += '</li>';
 	$(".pager").html(html);
 	$(".page-item").click(function(){
-		getList(	$(this).data("page")	);
+		if(!$(this).hasClass("disabled")) getList($(this).data("page"));
 	});
 }
