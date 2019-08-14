@@ -45,6 +45,8 @@ function getList(page) {
 				html += '<td class="text-center">';
 				html += '<button class="btn btn-success" onclick="upData(this, '+res.student[i].id+');">수정</button> ';
 				html += '<button class="btn btn-danger" onclick="delData(this, '+res.student[i].id+');">삭제</button>';
+				html += '<button class="btn btn-primary d-none" onclick="upSave(this, '+res.student[i].id+');">저장</button> ';
+				html += '<button class="btn btn-info d-none" onclick="upCancel(this, '+res.student[i].id+');">취소</button>';
 				html += '</td>';
 				html += '</tr>';
 				$(".score-tb").find("tbody").append(html);
@@ -61,20 +63,84 @@ function getList(page) {
 // 리스트 수정하기
 function upData(bt, id) {
 	// console.log(bt, $(bt), id);
-	$bt = $(bt);
-	$td = $bt.parent();
-	$tr = $td.parent();
-	for(var i=0, txt='', type=''; i<4; i++) {
+	var $bt = $(bt);
+	var $td = $bt.parent();
+	var $tr = $td.parent();
+	for(var i=0, txt='', type='text'; i<4; i++) {
 		txt = $tr.children("td").eq(i).text();
-		if(i == 0) type = "text";
-		else {
+		if(i>0) {
 			txt = txt.replace("점", "");
 			type = "number";
 		}
 		html = '<input type="'+type+'" class="form-control" value="'+txt+'">';
 		$tr.children("td").eq(i).html(html);
 	}
+	$td.children(".btn").toggleClass("d-none");
 }
+
+function upSave(bt, id) {
+
+}
+
+function upCancel(bt, id) {
+	var $bt = $(bt);
+	var $td = $bt.parent();
+	var $tr = $td.parent();
+	for(var i=0, txt=''; i<4; i++) {
+		txt = $tr.children("td").eq(i).children("input").val();
+		if(i>0) txt += "점";
+		$tr.children("td").eq(i).html(txt);
+	}
+	$td.children(".btn").toggleClass("d-none");
+}
+
+
+// 리스트 저장하기
+$("#bt-save").click(function(){
+	var stdname = $.trim($("#stdname").val());
+	var kor = Number($("#kor").val());
+	var eng = Number($("#eng").val());
+	var math = Number($("#math").val());
+	if(kor == 0) kor = "0";
+	if(eng == 0) eng = "0";
+	if(math == 0) math = "0";
+	if(stdname == "") {
+		alert("학생 이름을 입력해 주세요.");
+		$("#stdname").focus();
+		return;
+	}
+	if(kor == "" || kor<0 || kor>100) {
+		alert("올바른 국어점수를 입력하세요.");
+		$("#kor").focus();
+		return;
+	}
+	if(eng == "" || eng<0 || eng>100) {
+		alert("올바른 영어점수를 입력하세요.");
+		$("#eng").focus();
+		return;
+	}
+	if(math == "" || math<0 || math>100) {
+		alert("올바른 수학점수를 입력하세요.");
+		$("#math").focus();
+		return;
+	}
+	$.ajax({
+		type: "post",
+		url: scoreURL.cURL,
+		data: {
+			stdname: stdname,
+			kor: kor,
+			eng: eng,
+			math: math
+		},
+		dataType: "json",
+		success: function (res) {
+			if (res.code == 200) getList(nowPage);
+			else alert("데이터 처리가 실패했습니다. 관리자에게 문의하세요.");
+		}
+	});
+});
+
 
 // 리스트 삭제하기 
 function delData(bt, id) {
@@ -173,48 +239,3 @@ function deleteMaker() {
 */
 
 
-// 데이터 저장
-$("#bt-save").click(function(){
-	var stdname = $.trim($("#stdname").val());
-	var kor = Number($("#kor").val());
-	var eng = Number($("#eng").val());
-	var math = Number($("#math").val());
-	if(kor == 0) kor = "0";
-	if(eng == 0) eng = "0";
-	if(math == 0) math = "0";
-	if(stdname == "") {
-		alert("학생 이름을 입력해 주세요.");
-		$("#stdname").focus();
-		return;
-	}
-	if(kor == "" || kor<0 || kor>100) {
-		alert("올바른 국어점수를 입력하세요.");
-		$("#kor").focus();
-		return;
-	}
-	if(eng == "" || eng<0 || eng>100) {
-		alert("올바른 영어점수를 입력하세요.");
-		$("#eng").focus();
-		return;
-	}
-	if(math == "" || math<0 || math>100) {
-		alert("올바른 수학점수를 입력하세요.");
-		$("#math").focus();
-		return;
-	}
-	$.ajax({
-		type: "post",
-		url: scoreURL.cURL,
-		data: {
-			stdname: stdname,
-			kor: kor,
-			eng: eng,
-			math: math
-		},
-		dataType: "json",
-		success: function (res) {
-			if (res.code == 200) getList(nowPage);
-			else alert("데이터 처리가 실패했습니다. 관리자에게 문의하세요.");
-		}
-	});
-});
