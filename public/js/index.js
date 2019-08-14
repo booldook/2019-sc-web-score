@@ -10,29 +10,41 @@ $("#bt-data-test").click(function () {
 	console.log(id, show, hide);
 });
 
-
+// 전역변수
 var html = '';
-var site = "https://webmir.co.kr/score";
 var scoreURL = {
-	cURL: site + "/score_in.php",
-	rURL: site + "/score_li.php",
-	uURL: site + "/score_up.php",
-	dURL: site + "/score_del.php"
+	site: "https://webmir.co.kr/score",
+	cURL: "/score_in.php",
+	rURL: "/score_li.php",
+	uURL: "/score_up.php",
+	dURL: "/score_del.php",
+	getURL: function(url) {
+		if(url == "C") return this.site + this.cURL;
+		else if(url == "R") return this.site + this.rURL;
+		else if(url == "U") return this.site + this.uURL;
+		else if(url == "D") return this.site + this.dURL;
+	}
 }
 var nowPage = 1;
 
-getList(nowPage);
+console.log($);
+console.log(jQuery);
+
+getData(nowPage);
 // 리스트 가져오기 
 // get / https://webmir.co.kr/score/score_li.php / page
-function getList(page) {
+function getData(page) {
 	nowPage = page;		//지역변수 page의 값을 전역변수 nowPage에 넣어준다.
 	$.ajax({
 		type: "get",
-		url: scoreURL.rURL,
+		url: scoreURL.getURL('R'),
 		data: {
 			page: page
 		},
 		dataType: "json",
+		beforeSend: function() {
+			//로딩바...
+		},
 		success: function (res) {
 			console.log(res);
 			$(".score-tb").find("tbody").empty();
@@ -45,7 +57,7 @@ function getList(page) {
 				html += '<td class="text-center">';
 				html += '<button class="btn btn-success" onclick="upData(this, '+res.student[i].id+');">수정</button> ';
 				html += '<button class="btn btn-danger" onclick="delData(this, '+res.student[i].id+');">삭제</button>';
-				html += '<button class="btn btn-primary d-none" onclick="dataSave(this, '+res.student[i].id+');">저장</button> ';
+				html += '<button class="btn btn-primary d-none" onclick="saveData(this, '+res.student[i].id+');">저장</button> ';
 				html += '<button class="btn btn-info d-none" onclick="upCancel(this, '+res.student[i].id+');">취소</button>';
 				html += '</td>';
 				html += '</tr>';
@@ -92,8 +104,8 @@ function upCancel(bt, id) {
 
 
 // 리스트 저장하기
-function dataSave(bt, id){
-	var url = scoreURL.cURL;
+function saveData(bt, id){
+	var url = scoreURL.getURL('C');
 	var option;
 	var $tr = $(bt).parent().parent();
 	var $input = $tr.find("input");
@@ -127,7 +139,7 @@ function dataSave(bt, id){
 	};
 	
 	if(id > 0) {
-		url = scoreURL.uURL;
+		url = scoreURL.getURL('U');
 		option.id = id;
 	}
 
@@ -137,7 +149,7 @@ function dataSave(bt, id){
 		data: option,
 		dataType: "json",
 		success: function (res) {
-			if (res.code == 200) getList(nowPage);
+			if (res.code == 200) getData(nowPage);
 			else alert("데이터 처리가 실패했습니다. 관리자에게 문의하세요.");
 		}
 	});
@@ -181,7 +193,7 @@ function dataSave(bt, id){
 		},
 		dataType: "json",
 		success: function (res) {
-			if (res.code == 200) getList(nowPage);
+			if (res.code == 200) getData(nowPage);
 			else alert("데이터 처리가 실패했습니다. 관리자에게 문의하세요.");
 		}
 	});
@@ -193,11 +205,11 @@ function delData(bt, id) {
 	if(confirm("정말로 삭제하시겠습니까?")) {
 		$.ajax({
 			type: "post",
-			url: scoreURL.dURL,
+			url: scoreURL.getURL('D'),
 			data: {id: id},
 			dataType: "json",
 			success: function (res) {
-				if (res.code == 200) getList(nowPage);
+				if (res.code == 200) getData(nowPage);
 				else alert("데이터 처리가 실패했습니다. 관리자에게 문의하세요.");
 			}
 		});
@@ -256,7 +268,7 @@ function pagerMaker(total, page) {
 	html += '</li>';
 	$(".pager").html(html);
 	$(".page-item").click(function () {
-		if (!$(this).hasClass("disabled")) getList($(this).data("page"));
+		if (!$(this).hasClass("disabled")) getData($(this).data("page"));
 	});
 }
 console.log(!false);
@@ -275,7 +287,7 @@ function deleteMaker() {
 				data: {id: $(this).data("id")},
 				dataType: "json",
 				success: function (res) {
-					if (res.code == 200) getList(nowPage);
+					if (res.code == 200) getData(nowPage);
 					else alert("데이터 처리가 실패했습니다. 관리자에게 문의하세요.");
 				}
 			});
