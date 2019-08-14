@@ -64,9 +64,16 @@ function upData(bt, id) {
 	$bt = $(bt);
 	$td = $bt.parent();
 	$tr = $td.parent();
-	var stdname = $tr.children("td").eq(0).text();
-	html = '<input type="text" class="form-control" name="stdname" value="'+stdname+'">';
-	$tr.children("td").eq(0).html(html);
+	for(var i=0, txt='', type=''; i<4; i++) {
+		txt = $tr.children("td").eq(i).text();
+		if(i == 0) type = "text";
+		else {
+			txt = txt.replace("점", "");
+			type = "number";
+		}
+		html = '<input type="'+type+'" class="form-control" value="'+txt+'">';
+		$tr.children("td").eq(i).html(html);
+	}
 }
 
 // 리스트 삭제하기 
