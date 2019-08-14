@@ -45,7 +45,7 @@ function getList(page) {
 				html += '<td class="text-center">';
 				html += '<button class="btn btn-success" onclick="upData(this, '+res.student[i].id+');">수정</button> ';
 				html += '<button class="btn btn-danger" onclick="delData(this, '+res.student[i].id+');">삭제</button>';
-				html += '<button class="btn btn-primary d-none" onclick="upSave(this, '+res.student[i].id+');">저장</button> ';
+				html += '<button class="btn btn-primary d-none" onclick="dataSave(this, '+res.student[i].id+');">저장</button> ';
 				html += '<button class="btn btn-info d-none" onclick="upCancel(this, '+res.student[i].id+');">취소</button>';
 				html += '</td>';
 				html += '</tr>';
@@ -78,16 +78,12 @@ function upData(bt, id) {
 	$td.children(".btn").toggleClass("d-none");
 }
 
-function upSave(bt, id) {
-
-}
-
 function upCancel(bt, id) {
 	var $bt = $(bt);
 	var $td = $bt.parent();
 	var $tr = $td.parent();
 	for(var i=0, txt=''; i<4; i++) {
-		txt = $tr.children("td").eq(i).children("input").val();
+		txt = $tr.find("input").eq(i).val();
 		if(i>0) txt += "점";
 		$tr.children("td").eq(i).html(txt);
 	}
@@ -96,7 +92,57 @@ function upCancel(bt, id) {
 
 
 // 리스트 저장하기
-$("#bt-save").click(function(){
+function dataSave(bt, id){
+	var url = scoreURL.cURL;
+	var option;
+	var $tr = $(bt).parent().parent();
+	var $input = $tr.find("input");
+	var comment = [];
+	comment[0] = "학생이름을";
+	comment[1] = "올바른 국어 점수를";
+	comment[2] = "올바른 영어 점수를";
+	comment[3] = "올바른 수학 점수를";
+	for(var i=0; i<4; i++) {
+		if(i == 0) {
+			if($input.eq(i).val() == "") {
+				alert(comment[i] + " 입력해 주세요.");
+				$input.eq(i).focus();
+				return;
+			}
+		}
+		else {
+			if($.trim($input.eq(i).val()) == "" || Number($input.eq(i).val()) < 0 || Number($input.eq(i).val()) > 100) {
+				alert(comment[i] + " 입력하세요.");
+				$input.eq(i).focus();
+				return;
+			}
+		}
+	}
+
+	option = {
+		stdname: $.trim($input.eq(0).val()),
+		kor: $input.eq(1).val(),
+		eng: $input.eq(2).val(),
+		math: $input.eq(3).val()
+	};
+	
+	if(id > 0) {
+		url = scoreURL.uURL;
+		option.id = id;
+	}
+
+	$.ajax({
+		type: "post",
+		url: url,
+		data: option,
+		dataType: "json",
+		success: function (res) {
+			if (res.code == 200) getList(nowPage);
+			else alert("데이터 처리가 실패했습니다. 관리자에게 문의하세요.");
+		}
+	});
+
+	/*
 	var stdname = $.trim($("#stdname").val());
 	var kor = Number($("#kor").val());
 	var eng = Number($("#eng").val());
@@ -139,8 +185,8 @@ $("#bt-save").click(function(){
 			else alert("데이터 처리가 실패했습니다. 관리자에게 문의하세요.");
 		}
 	});
-});
-
+	*/
+}
 
 // 리스트 삭제하기 
 function delData(bt, id) {
