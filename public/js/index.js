@@ -43,20 +43,43 @@ function getList(page) {
 				html += '<td>' + res.student[i].eng + '점</td>';
 				html += '<td>' + res.student[i].math + '점</td>';
 				html += '<td class="text-center">';
-				html += '<button class="btn btn-success bt-up" data-id="' + res.student[i].id + '">수정</button> ';
-				html += '<button class="btn btn-danger bt-del" data-id="' + res.student[i].id + '">삭제</button>';
+				html += '<button class="btn btn-success" onclick="upData(this, '+res.student[i].id+');">수정</button> ';
+				html += '<button class="btn btn-danger" onclick="delData(this, '+res.student[i].id+');">삭제</button>';
 				html += '</td>';
 				html += '</tr>';
 				$(".score-tb").find("tbody").append(html);
 			}
 			pagerMaker(res.total, page);
-			deleteMaker();
 		},
 		error: function (xhr) {
 			alert("통신이 실패했습니다. 관리자에게 문의하세요.");
 			console.log(xhr);
 		}
 	});
+}
+
+// 리스트 수정하기
+function upData(bt, id) {
+	// console.log(bt, $(bt), id);
+	console.log($(bt).parent());
+	console.log($(bt).parent().parent());
+
+}
+
+// 리스트 삭제하기 
+function delData(bt, id) {
+	if(confirm("정말로 삭제하시겠습니까?")) {
+		$.ajax({
+			type: "post",
+			url: scoreURL.dURL,
+			data: {id: id},
+			dataType: "json",
+			success: function (res) {
+				if (res.code == 200) getList(nowPage);
+				else alert("데이터 처리가 실패했습니다. 관리자에게 문의하세요.");
+			}
+		});
+	}
 }
 
 
@@ -117,7 +140,9 @@ function pagerMaker(total, page) {
 console.log(!false);
 
 
-// 리스트 삭제하기 
+
+
+/*
 function deleteMaker() {
 	// post / https://webmir.co.kr/score/score_del.php / id
 	$(".bt-del").click(function () {
@@ -135,6 +160,8 @@ function deleteMaker() {
 		}
 	});
 }
+*/
+
 
 // 데이터 저장
 $("#bt-save").click(function(){
