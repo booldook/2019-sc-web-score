@@ -61,9 +61,12 @@ function getList(page) {
 // 리스트 수정하기
 function upData(bt, id) {
 	// console.log(bt, $(bt), id);
-	console.log($(bt).parent());
-	console.log($(bt).parent().parent());
-
+	$bt = $(bt);
+	$td = $bt.parent();
+	$tr = $td.parent();
+	var stdname = $tr.children("td").eq(0).text();
+	html = '<input type="text" class="form-control" name="stdname" value="'+stdname+'">';
+	$tr.children("td").eq(0).html(html);
 }
 
 // 리스트 삭제하기 
