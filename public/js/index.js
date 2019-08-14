@@ -83,7 +83,7 @@ function upCancel(bt, id) {
 	var $td = $bt.parent();
 	var $tr = $td.parent();
 	for(var i=0, txt=''; i<4; i++) {
-		txt = $tr.find("input").eq(i).val();
+		txt = $tr.find("td").eq(i).find("input").val();
 		if(i>0) txt += "점";
 		$tr.children("td").eq(i).html(txt);
 	}
@@ -102,7 +102,7 @@ function dataSave(bt, id){
 	comment[1] = "올바른 국어 점수를";
 	comment[2] = "올바른 영어 점수를";
 	comment[3] = "올바른 수학 점수를";
-	for(var i=0; i<4; i++) {
+	for(var i=0; i<$input.length; i++) {
 		if(i == 0) {
 			if($input.eq(i).val() == "") {
 				alert(comment[i] + " 입력해 주세요.");
