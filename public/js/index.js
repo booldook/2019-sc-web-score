@@ -74,7 +74,7 @@ function getData(page) {
 
 // 리스트 수정하기
 function upData(bt, id) {
-	// console.log(bt, $(bt), id);
+	console.log(bt, $(bt), id);
 	var $bt = $(bt);
 	var $td = $bt.parent();
 	var $tr = $td.parent();
@@ -91,6 +91,8 @@ function upData(bt, id) {
 }
 
 function upCancel(bt, id) {
+	getData(nowPage);
+	/*
 	var $bt = $(bt);
 	var $td = $bt.parent();
 	var $tr = $td.parent();
@@ -100,13 +102,14 @@ function upCancel(bt, id) {
 		$tr.children("td").eq(i).html(txt);
 	}
 	$td.children(".btn").toggleClass("d-none");
+	*/
 }
 
 
 // 리스트 저장하기
 function saveData(bt, id){
-	var url = scoreURL.getURL('C');
-	var option;
+	var url = scoreURL.getURL('C');			// 초기값은 score_in.php로 설정
+	var option = {};										// $.ajax의 data 값을 저장할 객체변수
 	var $tr = $(bt).parent().parent();
 	var $input = $tr.find("input");
 	var comment = [];
@@ -139,8 +142,8 @@ function saveData(bt, id){
 	};
 	
 	if(id > 0) {
-		url = scoreURL.getURL('U');
-		option.id = id;
+		url = scoreURL.getURL('U');	// 최초설정값은 score_in.php를 score_up.php로 교체
+		option.id = id;							// id 값을 option에 추가
 	}
 
 	$.ajax({
@@ -149,7 +152,10 @@ function saveData(bt, id){
 		data: option,
 		dataType: "json",
 		success: function (res) {
-			if (res.code == 200) getData(nowPage);
+			if (res.code == 200) {
+				if(id == 0) $input.val('');
+				getData(nowPage);
+			}
 			else alert("데이터 처리가 실패했습니다. 관리자에게 문의하세요.");
 		}
 	});
@@ -225,13 +231,13 @@ function pagerMaker(total, page) {
 	var edn = 0; // 세트중에 마지막페이지
 	var prev = 0; // < 를 클릭시 나타날 페이지 
 	var next = 0; // > 를 클릭시 나타날 페이지
-	var prevShow = false;
-	var lastShow = false;
+	var prevShow = false;	// << 회색(false), 파란색(true)
+	var lastShow = false;	// >> 회색(false), 파란색(true)
 	var lastIndex = (Math.ceil(cnt / div) - 1); // 페이지 세트의 마지막 index
 	var nowIndex = (Math.ceil(page / div) - 1); // 현재페이지 세트의 index
 
 	stn = nowIndex * div + 1; // 세트의 시작페이지 값
-	if (cnt < stn + div - 1) edn = cnt;
+	if (cnt < stn + div - 1) edn = cnt;		// 세트의 마지막 페이지 값
 	else edn = stn + div - 1;
 
 	if (nowIndex > 0) {
